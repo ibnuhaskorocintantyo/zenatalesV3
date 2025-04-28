@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Comic+Neue:wght@300;400;700&display=swap');
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 20 14.3% 4.1%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 270 43% 80%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 198 47% 78%;
+  --secondary-foreground: 24 9.8% 10%;
+  --accent: 21 78% 75%;
+  --accent-foreground: 24 9.8% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 20 14.3% 4.1%;
+  --radius: 0.5rem;
+  --sidebar-background: 240 10% 3.9%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-primary: 207 90% 54%;
+  --sidebar-primary-foreground: 211 100% 99%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 240 4.9% 83.9%;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 270 43% 80%;
+  --primary-foreground: 211 100% 99%;
+  --secondary: 198 47% 78%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 21 78% 75%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 240 4.9% 83.9%;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-gradient-to-br from-[#fff8e7] to-primary-light;
+  }
+}
+
+/* Custom background colors */
+.bg-cream {
+  background-color: #fff8e7;
+}
+
+.bg-primary-light {
+  background-color: #d7cdef;
+}
+
+.bg-primary-dark {
+  background-color: #a991d4;
+}
+
+.bg-secondary-light {
+  background-color: #c2e3f0;
+}
+
+.bg-secondary-dark {
+  background-color: #8ac6db;
+}
+
+.bg-accent-light {
+  background-color: #fac0aa;
+}
+
+.bg-accent-dark {
+  background-color: #f58e64;
+}
+
+.text-primary-dark {
+  color: #a991d4;
+}
+
+.text-accent-dark {
+  color: #f58e64;
+}
+
+.text-success-dark {
+  color: #5a9d76;
+}
+
+.bg-success {
+  background-color: #a8d5ba;
+}
+
+.bg-success\/30 {
+  background-color: rgba(168, 213, 186, 0.3);
+}
+
+.bg-alert {
+  background-color: #fbe38e;
+}
+
+/* Custom font families */
+.font-heading {
+  font-family: 'Baloo 2', cursive;
+}
+
+.font-body {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.font-accent {
+  font-family: 'Comic Neue', cursive;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 8s ease-in-out 1s infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+/* Cloud styling */
+.cloud {
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.05));
+}
+
+.clip-path-cloud {
+  clip-path: polygon(
+    15% 99%, 3% 88%, 0% 66%, 0% 40%, 5% 22%, 21% 10%, 37% 3%, 66% 1%, 77% 5%, 
+    92% 20%, 100% 39%, 97% 61%, 91% 77%, 80% 89%, 61% 99%
+  );
+}
+
+/* Story container */
+.story-container {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Scrollbar styling */
+.story-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.story-container::-webkit-scrollbar-track {
+  background: rgba(197, 179, 230, 0.2);
+  border-radius: 10px;
+}
+
+.story-container::-webkit-scrollbar-thumb {
+  background-color: rgba(197, 179, 230, 0.7);
+  border-radius: 10px;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Magical border effect */
+.magical-border {
+  position: relative;
+}
+
+.magical-border::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #c5b3e6, #a7d7e8, #f8a889, #a8d5ba);
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.backdrop-blur {
+  backdrop-filter: blur(5px);
+}
+
+/* Star styles */
+.star {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+}
