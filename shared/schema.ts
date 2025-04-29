@@ -1,4 +1,12 @@
-import { pgTable, text, serial, integer, boolean, varchar, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  serial,
+  integer,
+  boolean,
+  varchar,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -28,8 +36,8 @@ export const stories = pgTable("stories", {
 });
 
 export const insertStorySchema = createInsertSchema(stories).omit({
-  id: true, 
-  createdAt: true
+  id: true,
+  createdAt: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
