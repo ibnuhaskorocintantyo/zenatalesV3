@@ -4,7 +4,18 @@ import OpenAI from "openai";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Language mapping for prompts
-const languagePrompts = {
+type SupportedLanguage = 'english' | 'indonesian' | 'french' | 'russian' | 'chinese' | 'thai';
+
+type LanguagePrompt = {
+  intro: string;
+  about: string;
+  theme: string;
+  customMessage: string;
+  prompt: string;
+  imagePrompt: string;
+};
+
+const languagePrompts: Record<SupportedLanguage, LanguagePrompt> = {
   english: {
     intro: "Create a whimsical and educational bedtime story for a child named",
     about: "about",
@@ -63,7 +74,12 @@ export async function generateStory(
   customMessage: string = "", 
   language: string = "english"
 ): Promise<{ title: string, content: string }> {
-  const langPrompts = languagePrompts[language] || languagePrompts.english;
+  // Type guard to ensure language is a valid supported language
+  const safeLanguage = (language as SupportedLanguage in languagePrompts) 
+    ? (language as SupportedLanguage) 
+    : 'english';
+    
+  const langPrompts = languagePrompts[safeLanguage];
   
   let promptText = `${langPrompts.intro} ${childName} ${langPrompts.about} ${animal} ${langPrompts.theme} ${theme}. `;
   
@@ -121,7 +137,12 @@ export async function generateStory(
 
 // Generate an image for the story
 export async function generateStoryImage(animal: string, theme: string, language: string = "english"): Promise<string> {
-  const langPrompts = languagePrompts[language] || languagePrompts.english;
+  // Type guard to ensure language is a valid supported language
+  const safeLanguage = (language as SupportedLanguage in languagePrompts) 
+    ? (language as SupportedLanguage) 
+    : 'english';
+    
+  const langPrompts = languagePrompts[safeLanguage];
   
   try {
     const response = await openai.images.generate({
@@ -132,7 +153,10 @@ export async function generateStoryImage(animal: string, theme: string, language
       quality: "standard",
     });
 
-    return response.data[0].url || "";
+    if (response.data && response.data.length > 0 && response.data[0].url) {
+      return response.data[0].url;
+    }
+    return "";
   } catch (error) {
     console.error("Error generating image:", error);
     return ""; // Return empty string if image generation fails

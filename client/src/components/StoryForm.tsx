@@ -17,12 +17,13 @@ const formSchema = z.object({
   animal: z.string().min(1, "Please select an animal"),
   theme: z.string().min(1, "Please select a theme"),
   customMessage: z.string().optional(),
+  language: z.string().default("english"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 interface StoryFormProps {
-  onGenerate: (childName: string, animal: string, theme: string, customMessage: string) => void;
+  onGenerate: (childName: string, animal: string, theme: string, customMessage: string, language: string) => void;
   isGenerating: boolean;
 }
 
@@ -34,6 +35,7 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
       animal: "",
       theme: "",
       customMessage: "",
+      language: "english",
     },
   });
 
@@ -42,7 +44,8 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
       data.childName,
       data.animal,
       data.theme,
-      data.customMessage || ""
+      data.customMessage || "",
+      data.language
     );
   };
 
@@ -154,6 +157,43 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
                           <SelectItem value="adventure">Adventure & Discovery</SelectItem>
                           <SelectItem value="kindness">Kindness & Helping Others</SelectItem>
                           <SelectItem value="dreams">Dreams & Imagination</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            {/* Language Selection */}
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-body font-medium text-primary-dark">
+                    Story Language
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-accent">
+                        🌍
+                      </span>
+                      <Select 
+                        onValueChange={field.onChange} 
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full pl-10 pr-10 py-6 bg-cream rounded-xl border-2 border-secondary/40 focus:border-primary focus:ring focus:ring-primary/30 focus:outline-none font-body">
+                          <SelectValue placeholder="Select a language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="english">English</SelectItem>
+                          <SelectItem value="indonesian">Indonesian (Bahasa Indonesia)</SelectItem>
+                          <SelectItem value="french">French (Français)</SelectItem>
+                          <SelectItem value="russian">Russian (Русский)</SelectItem>
+                          <SelectItem value="chinese">Chinese (中文)</SelectItem>
+                          <SelectItem value="thai">Thai (ไทย)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
