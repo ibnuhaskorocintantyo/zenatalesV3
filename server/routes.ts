@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertStorySchema } from "@shared/schema";
 import { z } from "zod";
+import { generateStory, generateStoryImage } from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes

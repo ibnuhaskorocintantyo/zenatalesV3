@@ -22,6 +22,8 @@ export const stories = pgTable("stories", {
   animal: text("animal").notNull(),
   theme: text("theme").notNull(),
   customMessage: text("custom_message"),
+  language: text("language").notNull().default("english"),
+  imageUrl: text("image_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
