@@ -94,6 +94,28 @@ const StoryDisplay = ({ story, onPrint, onSave }: StoryDisplayProps) => {
               <div className="story-container bg-cream rounded-2xl p-5 border-2 border-secondary/30">
                 <article className="font-body text-gray-800 leading-relaxed">
                   <h3 className="font-heading text-xl text-primary-dark mb-4">{story.title}</h3>
+                  
+                  {/* Show story image if available */}
+                  {story.imageUrl && (
+                    <div className="mb-6 flex justify-center">
+                      <img 
+                        src={story.imageUrl} 
+                        alt={`Illustration for "${story.title}"`}
+                        className="rounded-xl shadow-md max-w-full max-h-[400px] object-contain border-4 border-white"
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Display language badge */}
+                  {story.language && story.language !== "english" && (
+                    <div className="mb-4 inline-block">
+                      <span className="bg-primary/30 text-primary-dark text-sm font-body font-medium py-1 px-3 rounded-full flex items-center">
+                        🌍 {story.language.charAt(0).toUpperCase() + story.language.slice(1)}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Story content */}
                   {story.content.split('\n\n').map((paragraph, index) => (
                     <p key={index} className="mb-4">{paragraph}</p>
                   ))}

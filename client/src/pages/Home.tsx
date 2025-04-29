@@ -3,8 +3,23 @@ import { motion } from "framer-motion";
 import StoryForm from "@/components/StoryForm";
 import StoryDisplay from "@/components/StoryDisplay";
 import Background from "@/components/Background";
-import { generateStory } from "@/lib/storyGenerator";
 import { Story } from "@shared/schema";
+// Define a custom API request function for this page
+const apiRequest = async (options: { url: string; method: string; body: any }) => {
+  try {
+    const response = await fetch(options.url, {
+      method: options.method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(options.body),
+      credentials: "include",
+    });
+    
+    return response;
+  } catch (error) {
+    console.error("API request error:", error);
+    throw error;
+  }
+};
 
 const Home = () => {
   const [story, setStory] = useState<Story | null>(null);
@@ -14,41 +29,37 @@ const Home = () => {
     childName: string,
     animal: string,
     theme: string,
-    customMessage: string
+    customMessage: string,
+    language: string = "english"
   ) => {
     setGenerating(true);
     
     try {
-      // We're using a timeout to simulate processing time
-      // This makes the UI feel more natural
-      setTimeout(() => {
-        const newStory = generateStory(childName, animal, theme, customMessage);
-        setStory(newStory);
+      // Use the API to generate the story with OpenAI
+      const response = await apiRequest({
+        url: '/api/generate-story',
+        method: 'POST',
+        body: {
+          childName,
+          animal,
+          theme,
+          customMessage,
+          language
+        }
+      });
+      
+      if (response && response.ok) {
+        const storyData = await response.json() as Story;
+        setStory(storyData);
         setGenerating(false);
-        
-        // Save to server (optional)
-        saveStoryToServer(newStory);
-      }, 2000);
+      }
     } catch (error) {
       console.error("Error generating story:", error);
       setGenerating(false);
     }
   };
 
-  const saveStoryToServer = async (story: Story) => {
-    try {
-      await fetch('/api/stories', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(story),
-        credentials: 'include',
-      });
-    } catch (error) {
-      console.error("Error saving story:", error);
-    }
-  };
+  // Story is already saved to the server when it's generated
 
   const handlePrintStory = () => {
     window.print();
