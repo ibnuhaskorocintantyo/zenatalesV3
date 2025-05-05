@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertStorySchema } from "@shared/schema";
 import { z } from "zod";
-import { generateStory, generateStoryImage } from "./openai";
+import { generateStory} from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes
@@ -98,7 +98,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const generatedStory = await generateStory(childName, animal, theme, customMessage, language);
       
       // Generate an image for the story
-      const imageUrl = await generateStoryImage(animal, theme, language);
       
       // Prepare story data
       const storyData = {
@@ -109,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         theme,
         customMessage: customMessage || null,
         language,
-        imageUrl
+        
       };
       
       // Save to database

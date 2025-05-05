@@ -8,10 +8,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Wand2, Loader2 } from "lucide-react";
 import { animals } from "@/lib/animalData";
 
-// Define the form schema
+// Warna baru untuk tema ceria
+const colors = {
+  primary: "#FF6BD6", // Pink cerah
+  secondary: "#7B61FF", // Ungu
+  accent: "#FFD166", // Kuning cerah
+  cream: "#FFF8F0", // Krim
+};
+
 const formSchema = z.object({
   childName: z.string().min(1, "Please enter your child's name"),
   animal: z.string().min(1, "Please select an animal"),
@@ -28,6 +35,8 @@ interface StoryFormProps {
 }
 
 const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
+  const [selectedAnimal, setSelectedAnimal] = useState("");
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,42 +59,56 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
   };
 
   return (
-    <div className="w-full lg:w-1/2">
+    <div className="w-full">
       <motion.div 
-        className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg"
+        className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border-2 border-white"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, type: "spring" }}
+        style={{
+          background: `linear-gradient(135deg, ${colors.cream} 0%, #FFFFFF 100%)`,
+          boxShadow: `0 10px 30px -10px ${colors.primary}40`,
+        }}
       >
-        <h2 className="font-heading text-2xl text-primary-dark font-bold mb-6 flex items-center">
-          <span className="mr-2 text-accent">✨</span>
-          Create Your Magic Story
-        </h2>
+        {/* Header dengan animasi */}
+        <motion.div
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <h2 className="font-heading text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
+            <span className="inline-block mr-2">✨</span>
+            Create a Magical Story!
+            <span className="inline-block ml-2">✨</span>
+          </h2>
+        </motion.div>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             {/* Child's Name Field */}
             <FormField
               control={form.control}
               name="childName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body font-medium text-primary-dark">
-                    Child's Name
+                  <FormLabel className="font-medium text-lg text-gray-700 flex items-center">
+                    <span className="mr-2">👶</span>
+                    Your Child's Name
                   </FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-accent">
-                        👶
-                      </span>
+                    <motion.div whileHover={{ scale: 1.01 }}>
                       <Input 
-                        placeholder="Enter your child's name" 
-                        className="pl-10 pr-4 py-6 bg-cream rounded-xl border-2 border-secondary/40 focus:border-primary focus:ring focus:ring-primary/30 focus:outline-none font-body transition-all"
+                        placeholder="Type the name here..." 
+                        className="pl-12 pr-4 py-6 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 font-body text-lg"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.8)",
+                          boxShadow: "0 4px 15px -5px rgba(123, 97, 255, 0.2)",
+                        }}
                         {...field} 
                       />
-                    </div>
+                    </motion.div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-pink-500 font-medium" />
                 </FormItem>
               )}
             />
@@ -96,36 +119,59 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
               name="animal"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body font-medium text-primary-dark">
-                    Favorite Animal
+                  <FormLabel className="font-medium text-lg text-gray-700 flex items-center">
+                    <span className="mr-2">🦄</span>
+                    Choose a Magical Creature
                   </FormLabel>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {animals.map((animal) => (
-                      <label 
-                        key={animal.value} 
-                        className={`cursor-pointer magical-border ${
-                          field.value === animal.value ? 'border-accent' : ''
-                        }`}
-                      >
-                        <input 
-                          type="radio" 
-                          className="sr-only peer" 
-                          value={animal.value}
-                          checked={field.value === animal.value}
-                          onChange={() => field.onChange(animal.value)}
-                        />
-                        <div className={`flex flex-col items-center justify-center bg-white rounded-xl p-3 transition-all border-2 border-transparent ${
-                          field.value === animal.value ? 'border-accent bg-accent/10' : 'hover:bg-primary/10'
-                        }`}>
-                          <div className="w-14 h-14 flex items-center justify-center text-3xl rounded-full mb-2">
-                            {animal.emoji}
-                          </div>
-                          <span className="font-accent text-sm">{animal.label}</span>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                  <FormMessage />
+                  <FormControl>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                      {animals.map((animal) => (
+                        <motion.div
+                          key={animal.value}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <label 
+                            className={`cursor-pointer block transition-all duration-200 ${
+                              field.value === animal.value 
+                                ? 'transform scale-105' 
+                                : 'opacity-90 hover:opacity-100'
+                            }`}
+                          >
+                            <input 
+                              type="radio" 
+                              className="sr-only peer" 
+                              value={animal.value}
+                              checked={field.value === animal.value}
+                              onChange={() => {
+                                field.onChange(animal.value);
+                                setSelectedAnimal(animal.value);
+                              }}
+                            />
+                            <motion.div 
+                              className={`flex flex-col items-center justify-center p-4 rounded-2xl border-3 transition-all ${
+                                field.value === animal.value
+                                  ? 'border-purple-400 bg-purple-50 shadow-lg'
+                                  : 'border-transparent bg-white hover:bg-purple-50 shadow-md'
+                              }`}
+                              animate={{
+                                y: field.value === animal.value ? [-2, 2, -2] : 0,
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: field.value === animal.value ? Infinity : 0,
+                                ease: "easeInOut"
+                              }}
+                            >
+                              <div className="text-4xl mb-2">{animal.emoji}</div>
+                              <span className="font-medium text-sm text-center">{animal.label}</span>
+                            </motion.div>
+                          </label>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </FormControl>
+                  <FormMessage className="text-pink-500 font-medium" />
                 </FormItem>
               )}
             />
@@ -136,32 +182,46 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
               name="theme"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body font-medium text-primary-dark">
+                  <FormLabel className="font-medium text-lg text-gray-700 flex items-center">
+                    <span className="mr-2">📖</span>
                     Story Theme
                   </FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-accent">
-                        ❤️
-                      </span>
+                    <motion.div whileHover={{ scale: 1.01 }}>
                       <Select 
                         onValueChange={field.onChange} 
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className="w-full pl-10 pr-10 py-6 bg-cream rounded-xl border-2 border-secondary/40 focus:border-primary focus:ring focus:ring-primary/30 focus:outline-none font-body">
-                          <SelectValue placeholder="Select a theme" />
+                        <SelectTrigger 
+                          className="w-full pl-12 pr-10 py-6 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 font-body text-lg"
+                          style={{
+                            background: "rgba(255, 255, 255, 0.8)",
+                            boxShadow: "0 4px 15px -5px rgba(123, 97, 255, 0.2)",
+                          }}
+                        >
+                          <SelectValue placeholder="Select a magical theme..." />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="courage">Courage & Bravery</SelectItem>
-                          <SelectItem value="friendship">Friendship & Sharing</SelectItem>
-                          <SelectItem value="adventure">Adventure & Discovery</SelectItem>
-                          <SelectItem value="kindness">Kindness & Helping Others</SelectItem>
-                          <SelectItem value="dreams">Dreams & Imagination</SelectItem>
+                        <SelectContent className="rounded-xl border-0 shadow-xl">
+                          {[
+                            { value: "courage", label: "Brave Adventures 🛡️" },
+                            { value: "friendship", label: "Friendship Tales 👫" },
+                            { value: "adventure", label: "Magical Journeys 🗺️" },
+                            { value: "kindness", label: "Kindness Stories 💖" },
+                            { value: "dreams", label: "Dreamy Fantasies 🌈" },
+                          ].map((theme) => (
+                            <SelectItem 
+                              key={theme.value} 
+                              value={theme.value}
+                              className="text-lg py-3 hover:bg-purple-50"
+                            >
+                              {theme.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
-                    </div>
+                    </motion.div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-pink-500 font-medium" />
                 </FormItem>
               )}
             />
@@ -172,33 +232,46 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
               name="language"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body font-medium text-primary-dark">
+                  <FormLabel className="font-medium text-lg text-gray-700 flex items-center">
+                    <span className="mr-2">🌎</span>
                     Story Language
                   </FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-accent">
-                        🌍
-                      </span>
+                    <motion.div whileHover={{ scale: 1.01 }}>
                       <Select 
                         onValueChange={field.onChange} 
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className="w-full pl-10 pr-10 py-6 bg-cream rounded-xl border-2 border-secondary/40 focus:border-primary focus:ring focus:ring-primary/30 focus:outline-none font-body">
-                          <SelectValue placeholder="Select a language" />
+                        <SelectTrigger 
+                          className="w-full pl-12 pr-10 py-6 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 font-body text-lg"
+                          style={{
+                            background: "rgba(255, 255, 255, 0.8)",
+                            boxShadow: "0 4px 15px -5px rgba(123, 97, 255, 0.2)",
+                          }}
+                        >
+                          <SelectValue placeholder="Choose a language..." />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="english">English</SelectItem>
-                          <SelectItem value="indonesian">Indonesian (Bahasa Indonesia)</SelectItem>
-                          <SelectItem value="french">French (Français)</SelectItem>
-                          <SelectItem value="russian">Russian (Русский)</SelectItem>
-                          <SelectItem value="chinese">Chinese (中文)</SelectItem>
-                          <SelectItem value="thai">Thai (ไทย)</SelectItem>
+                        <SelectContent className="rounded-xl border-0 shadow-xl">
+                          {[
+                            { value: "english", label: "English 🇬🇧" },
+                            { value: "indonesian", label: "Bahasa Indonesia 🇮🇩" },
+                            { value: "french", label: "Français 🇫🇷" },
+                            { value: "russian", label: "Русский 🇷🇺" },
+                            { value: "chinese", label: "中文 🇨🇳" },
+                          ].map((lang) => (
+                            <SelectItem 
+                              key={lang.value} 
+                              value={lang.value}
+                              className="text-lg py-3 hover:bg-purple-50"
+                            >
+                              {lang.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
-                    </div>
+                    </motion.div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-pink-500 font-medium" />
                 </FormItem>
               )}
             />
@@ -209,41 +282,68 @@ const StoryForm = ({ onGenerate, isGenerating }: StoryFormProps) => {
               name="customMessage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-body font-medium text-primary-dark">
-                    Special Message <span className="text-sm font-normal text-primary">(Optional)</span>
+                  <FormLabel className="font-medium text-lg text-gray-700 flex items-center">
+                    <span className="mr-2">💌</span>
+                    Special Magic Wish
+                    <span className="ml-2 text-sm font-normal text-gray-500">(optional)</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Add a special message or lesson for your child..." 
-                      className="p-4 bg-cream rounded-xl border-2 border-secondary/40 focus:border-primary focus:ring focus:ring-primary/30 focus:outline-none font-body transition-all"
-                      {...field} 
-                    />
+                    <motion.div whileHover={{ scale: 1.01 }}>
+                      <Textarea 
+                        placeholder="Write a special message for your child..."
+                        className="p-4 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 font-body text-lg min-h-[120px]"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.8)",
+                          boxShadow: "0 4px 15px -5px rgba(123, 97, 255, 0.2)",
+                        }}
+                        {...field} 
+                      />
+                    </motion.div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-pink-500 font-medium" />
                 </FormItem>
               )}
             />
             
             {/* Generate Button */}
-            <div className="pt-2">
+            <motion.div 
+              className="pt-4"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+            >
               <Button
                 type="submit"
-                className="w-full bg-accent hover:bg-accent-dark text-white font-heading font-bold py-6 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 transform hover:scale-[1.02]"
+                className={`w-full font-bold py-7 px-6 rounded-xl text-lg shadow-lg transition-all ${
+                  isGenerating 
+                    ? 'bg-purple-300' 
+                    : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                }`}
                 disabled={isGenerating}
               >
                 {isGenerating ? (
-                  <>
-                    <span className="animate-spin mr-2">⏳</span>
-                    <span>Creating your story...</span>
-                  </>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    className="flex items-center"
+                  >
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    <span>Brewing Magic...</span>
+                  </motion.div>
                 ) : (
-                  <>
-                    <Sparkles className="mr-2" />
-                    <span>Create Magical Story</span>
-                  </>
+                  <div className="flex items-center">
+                    <Wand2 className="h-5 w-5 mr-2" />
+                    <span>Create Magical Story!</span>
+                    <motion.span
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="ml-2"
+                    >
+                      ✨
+                    </motion.span>
+                  </div>
                 )}
               </Button>
-            </div>
+            </motion.div>
           </form>
         </Form>
       </motion.div>
