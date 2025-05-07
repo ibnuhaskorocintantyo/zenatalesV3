@@ -4,16 +4,6 @@
         "runtime": "nodejs18.x"
       }
     },
-    "builds": [
-      {
-        "src": "api/index.ts",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "client/index.html",
-        "use": "@vercel/static-build"
-      }
-    ],
     "routes": [
       { "src": "/api/(.*)", "dest": "/api/index.ts" },
       { "src": "/(.*)", "dest": "/client/index.html" }
