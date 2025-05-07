@@ -1,4 +1,4 @@
-// App.tsx
+// App.tsx yang saya test
 import { Switch, Route, Redirect } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
