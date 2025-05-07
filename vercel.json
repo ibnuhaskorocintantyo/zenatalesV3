@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/index.ts": {
-      "runtime": "@vercel/node@4.2.4"  // Gunakan runtime resmi dengan versi
+      "runtime": "@vercel/node@4.2.4"  
     }
   },
   "routes": [
