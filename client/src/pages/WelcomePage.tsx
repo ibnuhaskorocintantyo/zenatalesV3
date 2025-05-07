@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { FaPaw, FaArrowRight, FaBook, FaStar, FaHistory } from "react-icons/fa";
-import { Typewriter } from 'react-simple-typewriter';  // Ganti import ini
+import { Typewriter } from 'react-simple-typewriter';  
 
 const WelcomePage = () => {
   const [_, navigate] = useLocation();
