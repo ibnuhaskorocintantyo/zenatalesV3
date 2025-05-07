@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { FaPaw, FaArrowRight, FaBook, FaStar, FaHistory } from "react-icons/fa";
-import Typical from "react-typical";
+import { Typewriter } from 'react-simple-typewriter';  // Ganti import ini
 
 const WelcomePage = () => {
   const [_, navigate] = useLocation();
@@ -57,13 +57,14 @@ const WelcomePage = () => {
           transition={{ delay: 0.4 }}
           className="text-sm md:text-lg text-purple-700 mb-6 md:mb-8 mx-auto min-h-[40px] md:min-h-[32px] px-4"
         >
-          <Typical
-            steps={[
-              "Create magical bedtime stories...", 2000,
-              "Featuring your child and furry friends!", 2000,
-            ]}
-            loop={Infinity}
-            wrapper="span"
+          <Typewriter
+            words={['Create magical bedtime stories...', 'Featuring your child and furry friends!']}
+            loop={true}
+            cursor
+            cursorStyle="|"
+            typeSpeed={70}
+            deleteSpeed={50}
+            delaySpeed={1000}
           />
         </motion.p>
 
@@ -74,21 +75,20 @@ const WelcomePage = () => {
           transition={{ delay: 0.6 }}
           className="grid md:grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-8 w-full px-4"
         >
-          {[
-            { icon: FaBook, title: "Create Stories", text: "Personalized adventures in minutes" },
+          {[{ icon: FaBook, title: "Create Stories", text: "Personalized adventures in minutes" },
             { icon: FaStar, title: "Save Favorites", text: "Keep beloved stories forever" },
-            { icon: FaHistory, title: "Read Again", text: "Revisit past creations anytime" },
-          ].map((feature, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
-            >
-              <feature.icon className="text-2xl md:text-3xl text-purple-600 mb-2 md:mb-4" />
-              <h3 className="text-lg md:text-xl font-semibold text-purple-900 mb-1 md:mb-2">{feature.title}</h3>
-              <p className="text-xs md:text-base text-purple-600 leading-tight">{feature.text}</p>
-            </motion.div>
-          ))}
+            { icon: FaHistory, title: "Read Again", text: "Revisit past creations anytime" }]
+            .map((feature, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                className="bg-white p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+              >
+                <feature.icon className="text-2xl md:text-3xl text-purple-600 mb-2 md:mb-4" />
+                <h3 className="text-lg md:text-xl font-semibold text-purple-900 mb-1 md:mb-2">{feature.title}</h3>
+                <p className="text-xs md:text-base text-purple-600 leading-tight">{feature.text}</p>
+              </motion.div>
+            ))}
         </motion.div>
 
         {/* Animated Glowing Button */}
@@ -122,4 +122,5 @@ const WelcomePage = () => {
     </motion.div>
   );
 };
+
 export default WelcomePage;
