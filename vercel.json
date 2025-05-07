@@ -1,12 +1,17 @@
 {
-    "functions": {
-      "api/index.ts": {
-        "runtime": "nodejs18.x"
-      }
-    },
-    "routes": [
-      { "src": "/api/(.*)", "dest": "/api/index.ts" },
-      { "src": "/(.*)", "dest": "/client/index.html" }
-    ]
-  }
-  
+  "functions": {
+    "api/index.ts": {
+      "runtime": "@vercel/node@4.2.4"  // Gunakan runtime resmi dengan versi
+    }
+  },
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/index.ts" },
+    { "src": "/(.*)", "dest": "/client/index.html" }
+  ],
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node@4.2.4"
+    }
+  ]
+}
