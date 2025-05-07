@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/index.ts": {
-      "runtime": "@vercel/node@3.6.2"
+      "runtime": "@vercel/node@5.1.15"  // Versi terbaru
     }
   },
   "routes": [
