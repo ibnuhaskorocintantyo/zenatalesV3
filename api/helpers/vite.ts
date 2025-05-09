@@ -1,5 +1,6 @@
 import express, { type Express } from "express";
 import fs from "fs";
+import { fileURLToPath } from 'url';
 import path from "path";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
@@ -7,6 +8,9 @@ import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
 import type { ServerOptions } from "vite";
 
+// Fix untuk __dirname di ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const viteLogger = createLogger();
 
@@ -27,11 +31,18 @@ export async function setupVite(app: Express, server: Server) {
     hmr: { server },
     allowedHosts: true,
   };
-  
 
   const vite = await createViteServer({
     ...viteConfig,
     configFile: false,
+    root: path.resolve(__dirname, '../../client'), 
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '../../client/src'), // Tambahkan ini
+        '@shared': path.resolve(__dirname, '../../shared'),
+        '@assets': path.resolve(__dirname, '../../attached_assets'),
+      },
+    },// Path yang diperbaiki
     customLogger: {
       ...viteLogger,
       error: (msg, options) => {
@@ -44,6 +55,7 @@ export async function setupVite(app: Express, server: Server) {
   });
 
   app.use(vite.middlewares);
+  
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
 
@@ -53,7 +65,6 @@ export async function setupVite(app: Express, server: Server) {
         "../../client/index.html"
       );
 
-      // always reload the index.html file from disk incase it changes
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
       template = template.replace(
         `src="/src/main.tsx"`,
@@ -69,18 +80,22 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, "public");
+  const distPath = path.resolve(__dirname, "../../client/dist"); // Path yang diperbaiki
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`,
+      `Build directory not found: ${distPath}\nRun 'npm run build' in client directory first`
     );
   }
 
-  app.use(express.static(distPath));
+  // Serve static assets
+  app.use(express.static(distPath, {
+    index: false, // Disable directory index
+    maxAge: "1y", // Cache control
+  }));
 
-  // fall through to index.html if the file doesn't exist
+  // Fallback to index.html
   app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+    res.sendFile(path.join(distPath, "index.html"));
   });
 }

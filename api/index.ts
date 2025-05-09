@@ -58,14 +58,20 @@ app.use((req, res, next) => {
 
     if (process.env.NODE_ENV === "development") {
       const port = 5000;
-      server.listen({
-        port,
-        host: "0.0.0.0",
-        reusePort: true,
-      }, () => {
-        log(`🚀 Server lokal berjalan di port ${port}`);
-      });
+      server.listen(
+        {
+          port,
+          host: "0.0.0.0",
+          reusePort: true,
+        },
+        () => {
+          log(`🚀 Server lokal berjalan di port ${port}`);
+        }
+      );
+    } else {
+      console.log("🚀 Server tidak berjalan karena bukan mode development");
     }
+    
   } catch (error) {
     console.error("🔥 Server failed to start:");
     console.error(error instanceof Error ? error.stack : error);

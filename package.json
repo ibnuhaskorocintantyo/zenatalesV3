@@ -7,11 +7,12 @@
         "build:api": "cd api && npm install && tsc && cp -R ../shared ./dist/shared",
         "dev": "concurrently \"npm run dev:client\" \"npm run dev:api\"",
         "dev:client": "cd client && npm run dev",
-        "dev:api": "cd api && npm run dev"
+        "dev:api": "cd api && cross-env NODE_ENV=development npm run dev"
     },
     "devDependencies": {
         "@types/node": "^22.15.15",
         "concurrently": "^8.2.2",
+        "cross-env": "^7.0.3",
         "typescript": "^5.8.3"
     },
     "dependencies": {

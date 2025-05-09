@@ -308,7 +308,7 @@ const Home = () => {
         const controller = new AbortController();
         setAbortController(controller);
   
-        const response = await fetch("http://localhost:5000/api/generate-story", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/generate-story`, {
           method: "POST",
           body: JSON.stringify({
             childName,
