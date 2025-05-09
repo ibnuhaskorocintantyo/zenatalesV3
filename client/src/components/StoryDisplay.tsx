@@ -1,7 +1,7 @@
 import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "../components/ui/button";
-import { Story } from "../../../shared/schema";
+import { Story } from "../../../shared/types";
 import { PrinterIcon, SaveIcon, BookOpenIcon, CheckCircleIcon } from "lucide-react";
 
 interface StoryDisplayProps {

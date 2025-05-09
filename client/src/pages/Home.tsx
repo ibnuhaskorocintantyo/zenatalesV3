@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa";
 import StoryForm from "../components/StoryForm";
 import Background from "../components/Background";
-import { Story } from "../../../shared/schema";
+import { Story } from "../../../shared/types";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import WelcomePage from "../pages/WelcomePage";
 //import WelcomePage from "@/components/WelcomePage";
