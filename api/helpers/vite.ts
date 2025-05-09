@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
-import viteConfig from "../../vite.config";
+import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
 import type { ServerOptions } from "vite";
 
@@ -49,10 +49,8 @@ export async function setupVite(app: Express, server: Server) {
 
     try {
       const clientTemplate = path.resolve(
-        import.meta.dirname,
-        "../../",
-        "client",
-        "index.html",
+        __dirname,
+        "../../client/index.html"
       );
 
       // always reload the index.html file from disk incase it changes
@@ -71,7 +69,7 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(import.meta.dirname, "public");
+  const distPath = path.resolve(__dirname, "public");
 
   if (!fs.existsSync(distPath)) {
     throw new Error(

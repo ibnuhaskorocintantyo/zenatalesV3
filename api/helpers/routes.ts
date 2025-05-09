@@ -3,13 +3,16 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertStorySchema } from "../../shared/schema";
 import { z } from "zod";
-import { generateStory} from "./openai";
+import { generateStory} from "./openai"
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  console.log("✅ registerRoutes dipanggil");
   // API routes
   app.get('/api/stories', async (req, res) => {
     try {
+      console.log("📦 Mengecek storage.getAllStories...");
       const stories = await storage.getAllStories();
+      console.log("✅ Storage siap");
       res.json(stories);
     } catch (error) {
       console.error('Error fetching stories:', error);

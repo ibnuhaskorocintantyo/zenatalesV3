@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, memo, useRef, useMemo, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
 import { 
@@ -14,11 +14,11 @@ import {
   FaHeart,
   FaRegHeart
 } from "react-icons/fa";
-import StoryForm from "@/components/StoryForm";
-import Background from "@/components/Background";
-import { Story } from "@shared/schema";
+import StoryForm from "../components/StoryForm";
+import Background from "../components/Background";
+import { Story } from "../../../shared/schema";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import WelcomePage from "@/pages/WelcomePage";
+import WelcomePage from "../pages/WelcomePage";
 //import WelcomePage from "@/components/WelcomePage";
 
 // Interface untuk TypeScript
@@ -139,7 +139,7 @@ const StoryModal = ({
             <LoadingSpinner />
           ) : (
             <div className="prose">
-              {story?.content.split('\n').map((paragraph, index) => (
+              {story?.content.split('\n').map((paragraph: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
                 <p key={index} className="mb-4">{paragraph}</p>
               ))}
             </div>
@@ -308,7 +308,7 @@ const Home = () => {
         const controller = new AbortController();
         setAbortController(controller);
   
-        const response = await fetch("/api/generate-story", {
+        const response = await fetch("http://localhost:5000/api/generate-story", {
           method: "POST",
           body: JSON.stringify({
             childName,

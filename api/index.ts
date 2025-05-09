@@ -1,11 +1,17 @@
 import express, { type Request, Response, NextFunction } from "express";
 import serverless from "serverless-http";
 import { registerRoutes } from "./helpers/routes";
-import { setupVite, serveStatic, log } from "./helpers/vite";
+import { setupVite, serveStatic, log } from "./helpers/vite"
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cors({
+  origin: 'http://localhost:5174',
+  methods: ['GET', 'POST']
+}));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -38,24 +44,29 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  const server = await registerRoutes(app);
+  try {
+    const server = await registerRoutes(app);
 
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
+    if (app.get("env") === "development") {
+      await setupVite(app, server);
+    } else {
+      serveStatic(app);
+    }
 
-  // Modifikasi bagian ini untuk development lokal
-  if (process.env.NODE_ENV === "development") {
-    const port = 5000;
-    server.listen({
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    }, () => {
-      log(`🚀 Server lokal berjalan di port ${port}`);
-    });
+    if (process.env.NODE_ENV === "development") {
+      const port = 5000;
+      server.listen({
+        port,
+        host: "0.0.0.0",
+        reusePort: true,
+      }, () => {
+        log(`🚀 Server lokal berjalan di port ${port}`);
+      });
+    }
+  } catch (error) {
+    console.error("🔥 Server failed to start:");
+    console.error(error instanceof Error ? error.stack : error);
+    process.exit(1); // exit with error code
   }
 })();
 

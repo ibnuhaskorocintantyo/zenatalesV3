@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Story } from "@shared/schema";
+import { Button } from "../components/ui/button";
+import { Story } from "../../../shared/schema";
 import { PrinterIcon, SaveIcon, BookOpenIcon, CheckCircleIcon } from "lucide-react";
 
 interface StoryDisplayProps {
@@ -116,7 +116,7 @@ const StoryDisplay = ({ story, onPrint, onSave }: StoryDisplayProps) => {
                   )}
                   
                   {/* Story content */}
-                  {story.content.split('\n\n').map((paragraph, index) => (
+                  {story.content.split('\n\n').map((paragraph: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
                     <p key={index} className="mb-4">{paragraph}</p>
                   ))}
                   <p className="font-heading text-primary-dark text-center mt-8">The End</p>

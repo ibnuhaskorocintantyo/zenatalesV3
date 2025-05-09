@@ -1,20 +1,36 @@
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-console.log(process.env.DATABASE_URL); // Log DATABASE_URL untuk mengecek isinya
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+
+// ✅ Load .env dari root project (ZenatalesV/.env)
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import ws from 'ws';
-import * as schema from '../../shared/schema';
+import * as schema from "../../shared/schema"; 
 
+
+// Konfigurasi WebSocket Neon
 neonConfig.webSocketConstructor = ws;
 
+// Cek DATABASE_URL
 if (!process.env.DATABASE_URL) {
-  throw new Error(
-    'DATABASE_URL must be set. Did you forget to provision a database?',
-  );
+  throw new Error('DATABASE_URL must be set. Did you forget to create .env di root?');
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle({ client: pool, schema });
+// Inisialisasi Pool Neon
+export const pool = new Pool({ 
+  connectionString: process.env.DATABASE_URL 
+});
+
+// ✅ Inisialisasi Drizzle dengan parameter yang benar
+export const db = drizzle(pool, { 
+  schema, 
+  logger: true  // Opsional: aktifkan logging query
+});

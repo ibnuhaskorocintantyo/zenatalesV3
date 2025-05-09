@@ -1,5 +1,5 @@
 import { animals } from "./animalData";
-import { Story } from "@shared/schema";
+import { Story } from "../../../shared/schema";
 
 // Template segments for different parts of the story
 const storyBeginnings = {
@@ -439,6 +439,8 @@ export function generateStory(childName: string, animal: string, theme: string, 
     animal,
     theme,
     customMessage: customMessage || "",
-    createdAt: new Date()
+    createdAt: new Date(),
+    language: "en",  // Tambahkan properti 'language'
+    imageUrl: null    // Tambahkan properti 'imageUrl' (bisa null)
   };
 }
