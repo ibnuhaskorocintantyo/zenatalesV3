@@ -9,7 +9,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
-  origin: 'http://localhost:5174',
+  origin: [
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '',
+    'http://localhost:5174' // Port client lokal
+  ],
   methods: ['GET', 'POST']
 }));
 

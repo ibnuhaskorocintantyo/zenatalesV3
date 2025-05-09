@@ -2,35 +2,39 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "include": ["api/**/*", "shared/**/*"] 
-      }
-    },
-    {
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist",
-        "outputDirectory": "client/dist"
+        "cleanDistDir": true
+      }
+    },
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "include": ["api/helpers/**/*"] 
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.ts"
+      "dest": "/api/index.ts",
+      "methods": ["GET", "POST", "PUT", "DELETE"] 
     },
     {
       "src": "/assets/(.*)",
-      "dest": "/client/dist/assets/$1"
+      "dest": "/client/dist/assets/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
     },
     {
       "src": "/(.*)",
-      "dest": "/client/dist/$1",
+      "dest": "/client/dist/index.html",
       "headers": {
-        "Cache-Control": "s-maxage=31536000"
+        "Cache-Control": "no-cache" 
       }
     }
   ]
