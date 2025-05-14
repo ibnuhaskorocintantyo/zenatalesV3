@@ -2,9 +2,9 @@
     "name": "api",
     "type": "module",
     "scripts": {
-  "dev": "node --enable-source-maps --loader ts-node/esm index.ts",
-  "build": "tsc",
-  "start": "node dist/index.js"
+    "dev": "node --enable-source-maps --loader ts-node/esm index.ts",
+    "build": "tsc && cp -R ../shared ./dist/shared",
+    "start": "node dist/index.js"
 },
 
     "ts-node": {

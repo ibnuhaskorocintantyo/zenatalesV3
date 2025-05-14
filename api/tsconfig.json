@@ -7,21 +7,23 @@
     "customConditions": ["typescript", "node", "import"],
     "target": "ES2022",
     "outDir": "./dist",
-    "rootDir": "../",
-    "baseUrl": "../", 
-    "paths": {"@shared/*": ["shared/*"]},
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["./shared/*"]
+    },
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["@types/node"],
-    "allowSyntheticDefaultImports": true 
+    "allowSyntheticDefaultImports": true
   },
   "ts-node": {
     "experimentalSpecifierResolution": "node",
     "transpileOnly": true,
-    "esm": true,
+    "esm": true
   },
-  "include": ["**/*.ts", "../shared/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
