@@ -1,11 +1,10 @@
-# Use official Node.js image
-to match client deployment without nginx
+# Use official Node.js image for building client
 FROM node:18
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package manifest and install dependencies
 COPY package*.json ./
 RUN npm install
 
@@ -15,7 +14,7 @@ COPY . .
 # Build the Vite app for production
 RUN npm run build
 
-# Install serve to serve static assets
+# Install serve globally to serve static assets
 RUN npm install -g serve
 
 # Expose port for the web server
