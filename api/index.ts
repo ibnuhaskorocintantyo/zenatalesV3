@@ -56,28 +56,26 @@ app.use((req, res, next) => {
       serveStatic(app);
     }
 
-    if (process.env.NODE_ENV === "development") {
-      const port = 5000;
-      server.listen(
-        {
-          port,
-          host: "0.0.0.0",
-          reusePort: true,
-        },
-        () => {
-          log(`🚀 Server lokal berjalan di port ${port}`);
-        }
-      );
-    } else {
-      console.log("🚀 Server tidak berjalan karena bukan mode development");
-    }
+    // PENTING: Jalankan server di semua environment,
+    // gunakan port dari process.env.PORT agar sesuai dengan Railway
+    const port = process.env.PORT || 5000;
+    server.listen(
+      {
+        port,
+        host: "0.0.0.0",
+        reusePort: true,
+      },
+      () => {
+        log(`🚀 Server berjalan di port ${port} (env: ${process.env.NODE_ENV || 'undefined'})`);
+      }
+    );
     
   } catch (error) {
     console.error("🔥 Server failed to start:");
     console.error(error instanceof Error ? error.stack : error);
-    process.exit(1); // exit with error code
+    process.exit(1);
   }
 })();
 
-// Export handler untuk Vercel
+// Export handler untuk Vercel (kalau kamu deploy ke Vercel juga)
 export const handler = serverless(app);
