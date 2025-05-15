@@ -1,7 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import serverless from "serverless-http";
-import { registerRoutes } from "./helpers/routes";
-import { setupVite, serveStatic, log } from "./helpers/vite"
+import { registerRoutes } from "./helpers/routes.js";
+import { setupVite, serveStatic, log } from "./helpers/vite.js"
 import cors from 'cors';
 
 const app = express();

@@ -1,9 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertStorySchema } from "./schema";
+import { storage } from "../helpers/storage.js";
+import { insertStorySchema } from "../shared/schema.js";
 import { z } from "zod";
-import { generateStory} from "./openai"
+import { generateStory} from "../helpers/openai.js"
 
 export async function registerRoutes(app: Express): Promise<Server> {
   console.log("✅ registerRoutes dipanggil");

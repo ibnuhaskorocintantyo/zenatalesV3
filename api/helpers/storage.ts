@@ -1,5 +1,5 @@
-import { users, type User, type InsertUser, stories, type Story, type InsertStory } from "./schema";
-import { db } from "./db";
+import { users, type User, type InsertUser, stories, type Story, type InsertStory } from "../helpers/schema.js";
+import { db } from "../helpers/db.js";
 import { eq, desc } from "drizzle-orm";
 
 // Interface for storage operations
