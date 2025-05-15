@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: [
-      process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+      "https://zenatalesv3-production.up.railway.app",
       "http://localhost:5174", // port client lokal
     ],
     methods: ["GET", "POST"],
