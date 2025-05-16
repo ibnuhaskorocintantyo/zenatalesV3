@@ -6,22 +6,29 @@ import cors from "cors";
 
 const app = express();
 
+// ✅ Middleware untuk parsing body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// ✅ Middleware CORS (penting!)
 app.use(
   cors({
     origin: [
-      "https://zenatalesv3-production.up.railway.app",
-      "http://localhost:5174", // port client lokal
-      "capacitor://localhost",           // untuk Android/iOS build
-      "http://localhost",                // optional fallback
+      "https://zenatalesv3-production.up.railway.app", // domain production kamu
+      "http://localhost:5174",                          // dev lokal
+      "capacitor://localhost",                          // Android/iOS WebView
+      "http://localhost",                               // fallback
     ],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"], // pastikan OPTIONS disertakan
+    allowedHeaders: ["Content-Type"],    // penting untuk JSON
+    credentials: true                    // jika kamu kirim cookie/token
   })
 );
 
-// Middleware untuk logging request API dan response JSON-nya
+// ✅ Tambahkan handler untuk preflight (OPTIONS) — WAJIB untuk CORS sukses
+app.options("*", cors());
+
+// ✅ Middleware untuk logging API dan response JSON-nya
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -63,7 +70,6 @@ const isServerless = !!process.env.VERCEL;
     }
 
     if (!isServerless) {
-      // Jalankan server kalau bukan di environment serverless
       const port = process.env.PORT || 5000;
       server.listen(
         {
@@ -72,13 +78,10 @@ const isServerless = !!process.env.VERCEL;
           reusePort: true,
         },
         () => {
-          log(
-            `🚀 Server berjalan di port ${port} (env: ${process.env.NODE_ENV || "undefined"})`
-          );
+          log(`🚀 Server berjalan di port ${port} (env: ${process.env.NODE_ENV || "undefined"})`);
         }
       );
     } else {
-      // Kalau di serverless, jangan listen, biarkan platform yang handle
       log("⚡ Running in serverless mode, no direct listen()");
     }
   } catch (error) {
@@ -88,5 +91,4 @@ const isServerless = !!process.env.VERCEL;
   }
 })();
 
-// Export handler untuk serverless deployment (misal Vercel)
 export const handler = serverless(app);
