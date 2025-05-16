@@ -14,6 +14,8 @@ app.use(
     origin: [
       "https://zenatalesv3-production.up.railway.app",
       "http://localhost:5174", // port client lokal
+      "capacitor://localhost",           // untuk Android/iOS build
+      "http://localhost",                // optional fallback
     ],
     methods: ["GET", "POST"],
   })

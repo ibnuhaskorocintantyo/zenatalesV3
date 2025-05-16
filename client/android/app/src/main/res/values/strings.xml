@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ZenaTales</string>
+    <string name="title_activity_main">ZenaTales</string>
+    <string name="package_name">com.zenatales.app</string>
+    <string name="custom_url_scheme">com.zenatales.app</string>
+</resources>
